@@ -5,13 +5,16 @@ call @prog_init
 sub $112,%rsp
 xor %ecx,%ecx
 movq $80,32+0(%rsp)
-movq $@WndProc,32+8(%rsp)
+lea @WndProc-@_$NEXT(%rip),%rax
+mov %rax,32+8(%rsp)
 mov %rcx,32+16(%rsp)
-movq $0x400000,32+24(%rsp)
+lea @_$IMAGE-@_$NEXT(%rip),%rax
+mov %rax,32+24(%rsp)
 mov %rcx,32+32(%rsp)
 movq $8,32+48(%rsp)
 mov %rcx,32+56(%rsp)
-movq $@WName,32+64(%rsp)
+lea @WName-@_$NEXT(%rip),%rax
+mov %rax,32+64(%rsp)
 mov %rcx,32+72(%rsp)
 mov $0x7f00,%edx
 .dllcall "user32.dll" "LoadCursorA"
@@ -24,7 +27,8 @@ je @Err_Exit
 xor %ecx,%ecx
 mov $0x80000000,%edx
 push %rcx
-pushq $0x400000
+lea @_$IMAGE-@_$NEXT(%rip),%rax
+push %rax
 push %rcx
 push %rcx
 pushq $600
@@ -32,7 +36,7 @@ pushq $600
 push %rdx
 push %rdx
 mov $0x100,%ecx
-mov $@WName,%rdx
+lea @WName-@_$NEXT(%rip),%rdx
 mov %rdx,%r8
 mov $0x10c80000,%r9d
 sub $32,%rsp
@@ -71,26 +75,26 @@ sub $40,%rsp
 .dllcall "user32.dll" "SetProcessDPIAware"
 
 mov $0x3f800000,%eax
-mov %eax,@_$DATA+0
-mov %eax,@_$DATA+20
-mov %eax,@_$DATA+40
+mov %eax,@_$DATA+0-@_$NEXT(%rip)
+mov %eax,@_$DATA+20-@_$NEXT(%rip)
+mov %eax,@_$DATA+40-@_$NEXT(%rip)
 
 mov $0x0101010101010101,%rcx
 mov %rcx,%rax
-mov %rax,@_$DATA+256+16
-mov %rax,@_$DATA+256+24
+mov %rax,@_$DATA+256+16-@_$NEXT(%rip)
+mov %rax,@_$DATA+256+24-@_$NEXT(%rip)
 add %rcx,%rax
-mov %rax,@_$DATA+256+32
-mov %rax,@_$DATA+256+40
+mov %rax,@_$DATA+256+32-@_$NEXT(%rip)
+mov %rax,@_$DATA+256+40-@_$NEXT(%rip)
 add %rcx,%rax
-mov %rax,@_$DATA+256+48
-mov %rax,@_$DATA+256+56
+mov %rax,@_$DATA+256+48-@_$NEXT(%rip)
+mov %rax,@_$DATA+256+56-@_$NEXT(%rip)
 add %rcx,%rax
-mov %rax,@_$DATA+256+64
-mov %rax,@_$DATA+256+72
+mov %rax,@_$DATA+256+64-@_$NEXT(%rip)
+mov %rax,@_$DATA+256+72-@_$NEXT(%rip)
 add %rcx,%rax
-mov %rax,@_$DATA+256+80
-mov %rax,@_$DATA+256+88
+mov %rax,@_$DATA+256+80-@_$NEXT(%rip)
+mov %rax,@_$DATA+256+88-@_$NEXT(%rip)
 
 add $40,%rsp
 
@@ -137,13 +141,14 @@ mov 24(%rbp),%edx
 sub %edx,%ecx
 add %edx,%eax
 shl $2,%eax
-add $@_$DATA+4096+1200,%eax
+lea @_$DATA+4096+1200-@_$NEXT(%rip),%rdx
+add %rdx,%rax
+mov 112-4096-1200(%rdx),%esi
 mov 40(%rbp),%edx
-mov @_$DATA+112,%esi
 @paint_line_loop
 mov %edx,(%rax)
 mov %esi,1440000(%rax)
-add $4,%eax
+add $4,%rax
 dec %ecx
 jne @paint_line_loop
 
@@ -464,31 +469,31 @@ ret
 push %rdx
 cmp $2,%cl
 jae @get_xyz_X1
-movups @_$DATA+0,%xmm0
+movups @_$DATA+0-@_$NEXT(%rip),%xmm0
 movups %xmm0,(%rax)
-movups @_$DATA+16,%xmm0
+movups @_$DATA+16-@_$NEXT(%rip),%xmm0
 movups %xmm0,16(%rax)
-movups @_$DATA+32,%xmm0
+movups @_$DATA+32-@_$NEXT(%rip),%xmm0
 movups %xmm0,32(%rax)
 jmp @get_xyz_end
 @get_xyz_X1
 
 cmp $4,%cl
 jae @get_xyz_X2
-movups @_$DATA+16,%xmm0
+movups @_$DATA+16-@_$NEXT(%rip),%xmm0
 movups %xmm0,0(%rax)
-movups @_$DATA+32,%xmm0
+movups @_$DATA+32-@_$NEXT(%rip),%xmm0
 movups %xmm0,16(%rax)
-movups @_$DATA+0,%xmm0
+movups @_$DATA+0-@_$NEXT(%rip),%xmm0
 movups %xmm0,32(%rax)
 jmp @get_xyz_end
 @get_xyz_X2
 
-movups @_$DATA+32,%xmm0
+movups @_$DATA+32-@_$NEXT(%rip),%xmm0
 movups %xmm0,0(%rax)
-movups @_$DATA+0,%xmm0
+movups @_$DATA+0-@_$NEXT(%rip),%xmm0
 movups %xmm0,16(%rax)
-movups @_$DATA+16,%xmm0
+movups @_$DATA+16-@_$NEXT(%rip),%xmm0
 movups %xmm0,32(%rax)
 @get_xyz_end
 
@@ -515,31 +520,31 @@ ret
 push %rdx
 cmp $2,%cl
 jae @get_xyz_r_X1
-movups @_$DATA+48,%xmm0
+movups @_$DATA+48-@_$NEXT(%rip),%xmm0
 movups %xmm0,(%rax)
-movups @_$DATA+64,%xmm0
+movups @_$DATA+64-@_$NEXT(%rip),%xmm0
 movups %xmm0,16(%rax)
-movups @_$DATA+80,%xmm0
+movups @_$DATA+80-@_$NEXT(%rip),%xmm0
 movups %xmm0,32(%rax)
 jmp @get_xyz_r_end
 @get_xyz_r_X1
 
 cmp $4,%cl
 jae @get_xyz_r_X2
-movups @_$DATA+64,%xmm0
+movups @_$DATA+64-@_$NEXT(%rip),%xmm0
 movups %xmm0,0(%rax)
-movups @_$DATA+80,%xmm0
+movups @_$DATA+80-@_$NEXT(%rip),%xmm0
 movups %xmm0,16(%rax)
-movups @_$DATA+48,%xmm0
+movups @_$DATA+48-@_$NEXT(%rip),%xmm0
 movups %xmm0,32(%rax)
 jmp @get_xyz_r_end
 @get_xyz_r_X2
 
-movups @_$DATA+80,%xmm0
+movups @_$DATA+80-@_$NEXT(%rip),%xmm0
 movups %xmm0,0(%rax)
-movups @_$DATA+48,%xmm0
+movups @_$DATA+48-@_$NEXT(%rip),%xmm0
 movups %xmm0,16(%rax)
-movups @_$DATA+64,%xmm0
+movups @_$DATA+64-@_$NEXT(%rip),%xmm0
 movups %xmm0,32(%rax)
 @get_xyz_r_end
 
@@ -564,6 +569,8 @@ ret
 # %rcx -- num
 # return -- 0: no, 1: yes, 2: invalid
 push %rcx
+push %rdx
+lea @_$DATA-@_$NEXT(%rip),%rdx
 cmp $96,%cl
 jae @is_square_rotating_invalid
 mov %cl,%al
@@ -574,7 +581,7 @@ and $3,%al
 cmp $3,%al
 je @is_square_rotating_invalid
 
-mov @_$DATA+96,%al
+mov 96(%rdx),%al
 cmp $0,%al
 je @is_square_rotating_no
 
@@ -586,22 +593,25 @@ shr $4,%ch
 add %ch,%al
 movzbl %al,%eax
 shl $1,%eax
-mov @rotating_list(%rax),%ax
+mov @rotating_list-@_$DATA(%rdx,%rax,1),%ax
 and $0xf,%cl
 shr %cl,%ax
 test $1,%al
 jne @is_square_rotating_yes
 @is_square_rotating_no
 xor %eax,%eax
+pop %rdx
 pop %rcx
 ret
 
 @is_square_rotating_invalid
 mov $2,%eax
+pop %rdx
 pop %rcx
 ret
 @is_square_rotating_yes
 mov $1,%eax
+pop %rdx
 pop %rcx
 ret
 
@@ -609,7 +619,9 @@ ret
 push %rax
 push %rcx
 push %rdx
-sub $128,%rsp
+push %rbx
+sub $136,%rsp
+lea @_$DATA-@_$NEXT(%rip),%rbx
 movl $96,112(%rsp)
 @paint_squares_not_rotating_loop
 mov 112(%rsp),%ecx
@@ -648,10 +660,10 @@ addps %xmm4,%xmm3
 movups %xmm3,(%rsp)
 mov 112(%rsp),%ecx
 dec %ecx
-mov %ecx,@_$DATA+112
-movzbl @_$DATA+256(%rcx),%ecx
+mov %ecx,112(%rbx)
+movzbl 256(%rbx,%rcx,1),%ecx
 shl $4,%ecx
-movups @square_colors(%rcx),%xmm0
+movups @square_colors-@_$DATA(%rbx,%rcx,1),%xmm0
 movups %xmm0,64(%rsp)
 call @paint_full_square
 
@@ -660,9 +672,9 @@ call @paint_full_square
 decl 112(%rsp)
 jne @paint_squares_not_rotating_loop
 
-cmpb $0,@_$DATA+96
+cmpb $0,@_$DATA+96-@_$NEXT(%rip)
 je @paint_squares_not_rotating_end
-mov @_$DATA+96,%cl
+mov @_$DATA+96-@_$NEXT(%rip),%cl
 dec %cl
 
 lea 16(%rsp),%rax
@@ -690,7 +702,8 @@ movl $0x40400000,76(%rsp)
 call @paint_square
 @paint_squares_not_rotating_end
 
-add $128,%rsp
+add $136,%rsp
+pop %rbx
 pop %rdx
 pop %rcx
 pop %rax
@@ -701,7 +714,9 @@ ret
 push %rax
 push %rcx
 push %rdx
-sub $128,%rsp
+push %rbx
+sub $136,%rsp
+lea @_$DATA-@_$NEXT(%rip),%rbx
 movl $96,112(%rsp)
 @paint_squares_rotating_loop
 mov 112(%rsp),%ecx
@@ -740,9 +755,9 @@ addps %xmm4,%xmm3
 movups %xmm3,(%rsp)
 mov 112(%rsp),%ecx
 dec %ecx
-movzbl @_$DATA+256(%rcx),%ecx
+movzbl 256(%rbx,%rcx,1),%ecx
 shl $4,%ecx
-movups @square_colors(%rcx),%xmm0
+movups @square_colors-@_$DATA(%rbx,%rcx,1),%xmm0
 movups %xmm0,64(%rsp)
 call @paint_full_square
 
@@ -751,9 +766,9 @@ call @paint_full_square
 decl 112(%rsp)
 jne @paint_squares_rotating_loop
 
-cmpb $0,@_$DATA+96
+cmpb $0,@_$DATA+96-@_$NEXT(%rip)
 je @paint_squares_rotating_end
-mov @_$DATA+96,%cl
+mov @_$DATA+96-@_$NEXT(%rip),%cl
 dec %cl
 xor $1,%cl
 lea 16(%rsp),%rax
@@ -781,7 +796,8 @@ movl $0x40400000,76(%rsp)
 call @paint_square
 @paint_squares_rotating_end
 
-add $128,%rsp
+add $136,%rsp
+pop %rbx
 pop %rdx
 pop %rcx
 pop %rax
@@ -858,17 +874,20 @@ ret
 
 @paint_all
 push %rdx
-sub $128,%rsp
-mov $@_$DATA+4096,%rdx
+push %rbx
+sub $136,%rsp
+lea @_$DATA-@_$NEXT(%rip),%rbx
+lea 4096(%rbx),%rdx
+add $1444096,%rbx
 
 @paint_all_clear_loop
 movq $0,(%rdx)
 movq $-1,1440000(%rdx)
 add $8,%rdx
-cmp $@_$DATA+1444096,%rdx
+cmp %rbx,%rdx
 jne @paint_all_clear_loop
 
-mov @_$DATA+96,%cl
+mov @_$DATA+96-@_$NEXT(%rip),%cl
 cmp $0,%cl
 je @paint_all_norotate
 dec %cl
@@ -876,18 +895,19 @@ dec %cl
 lea 32(%rsp),%rax
 call @get_xyz
 
-mov @_$DATA+116,%eax
+mov @_$DATA+116-@_$NEXT(%rip),%eax
 mov %eax,16(%rsp)
-movups @_$DATA+0,%xmm0
-movups %xmm0,@_$DATA+48
-movups @_$DATA+16,%xmm0
-movups %xmm0,@_$DATA+64
-movups @_$DATA+32,%xmm0
-movups %xmm0,@_$DATA+80
+movups @_$DATA+0-@_$NEXT(%rip),%xmm0
+movups %xmm0,@_$DATA+48-@_$NEXT(%rip)
+movups @_$DATA+16-@_$NEXT(%rip),%xmm0
+movups %xmm0,@_$DATA+64-@_$NEXT(%rip)
+movups @_$DATA+32-@_$NEXT(%rip),%xmm0
+movups %xmm0,@_$DATA+80-@_$NEXT(%rip)
 
 lea 64(%rsp),%rax
 mov %rax,(%rsp)
-movq $@_$DATA+48,8(%rsp)
+lea @_$DATA+48-@_$NEXT(%rip),%rax
+mov %rax,8(%rsp)
 call @rotate_around
 addq $16,8(%rsp)
 call @rotate_around
@@ -931,7 +951,8 @@ jmp @paint_all_end
 call @paint_squares_not_rotating
 @paint_all_end
 
-add $128,%rsp
+add $136,%rsp
+pop %rbx
 pop %rdx
 ret
 
@@ -941,23 +962,29 @@ push %rax
 push %rcx
 push %rdx
 push %rbx
-sub $128,%rsp
+push %rsi
+sub $136,%rsp
 movzbl %al,%eax
 shl $4,%eax
 xor %ecx,%ecx
+lea @_$DATA+256-@_$NEXT(%rip),%rsi
 @transform_cw_X11
-mov @_$DATA+256(%rax,%rcx,1),%bl
+mov (%rax,%rsi,1),%bl
 mov %bl,(%rsp,%rcx,1)
 inc %ecx
+inc %rsi
 cmp $11,%ecx
 jne @transform_cw_X11
+sub $11,%rsi
 xor %ecx,%ecx
 @transform_cw_X12
-movzbl @cube_transform2(%rcx),%edx
+movzbl @cube_transform2-@_$DATA-256(%rsi,%rcx,1),%edx
 cmp $10,%edx
 ja @transform_cw_X13
 mov (%rsp,%rcx,1),%bl
-mov %bl,@_$DATA+256(%rax,%rdx,1)
+add %rax,%rsi
+mov %bl,(%rsi,%rdx,1)
+sub %rax,%rsi
 @transform_cw_X13
 inc %ecx
 cmp $11,%ecx
@@ -967,11 +994,14 @@ shr $2,%eax
 lea (%rax,%rax,2),%eax
 
 xor %ecx,%ecx
+lea @cube_transform3-@_$NEXT(%rip),%rsi
 @transform_cw_X2
-movzbl @cube_transform3(%rax,%rcx,1),%edx
-mov @_$DATA+256(%rdx),%bl
+movzbl (%rax,%rsi,1),%edx
+sub %rcx,%rdx
+mov @_$DATA+256-@cube_transform3(%rsi,%rdx,1),%bl
 mov %bl,3(%rsp,%rcx,1)
 inc %ecx
+inc %rsi
 cmp $12,%ecx
 jne @transform_cw_X2
 mov 12(%rsp),%bx
@@ -980,15 +1010,19 @@ mov 14(%rsp),%bl
 mov %bl,2(%rsp)
 
 xor %ecx,%ecx
+lea @cube_transform3-@_$NEXT(%rip),%rsi
 @transform_cw_X3
-movzbl @cube_transform3(%rax,%rcx,1),%edx
+movzbl (%rax,%rsi,1),%edx
 mov (%rsp,%rcx,1),%bl
-mov %bl,@_$DATA+256(%rdx)
+sub %rcx,%rdx
+mov %bl,@_$DATA+256-@cube_transform3(%rsi,%rdx,1)
 inc %ecx
+inc %rsi
 cmp $12,%ecx
 jne @transform_cw_X3
 
-add $128,%rsp
+add $136,%rsp
+pop %rsi
 pop %rbx
 pop %rdx
 pop %rcx
@@ -1001,23 +1035,29 @@ push %rax
 push %rcx
 push %rdx
 push %rbx
-sub $128,%rsp
+push %rsi
+sub $136,%rsp
 movzbl %al,%eax
 shl $4,%eax
 xor %ecx,%ecx
+lea @_$DATA+256-@_$NEXT(%rip),%rsi
 @transform_ccw_X11
-mov @_$DATA+256(%rax,%rcx,1),%bl
+mov (%rax,%rsi,1),%bl
 mov %bl,(%rsp,%rcx,1)
 inc %ecx
+inc %rsi
 cmp $11,%ecx
 jne @transform_ccw_X11
+sub $11,%rsi
 xor %ecx,%ecx
 @transform_ccw_X12
-movzbl @cube_transform1(%rcx),%edx
+movzbl @cube_transform1-@_$DATA-256(%rsi,%rcx,1),%edx
 cmp $10,%edx
 ja @transform_ccw_X13
 mov (%rsp,%rcx,1),%bl
-mov %bl,@_$DATA+256(%rax,%rdx,1)
+add %rax,%rsi
+mov %bl,(%rsi,%rdx,1)
+sub %rax,%rsi
 @transform_ccw_X13
 inc %ecx
 cmp $11,%ecx
@@ -1026,11 +1066,14 @@ shr $2,%eax
 lea (%rax,%rax,2),%eax
 
 xor %ecx,%ecx
+lea @cube_transform3-@_$NEXT(%rip),%rsi
 @transform_ccw_X2
-movzbl @cube_transform3(%rax,%rcx,1),%edx
-mov @_$DATA+256(%rdx),%bl
+movzbl (%rax,%rsi,1),%edx
+sub %rcx,%rdx
+mov @_$DATA+256-@cube_transform3(%rsi,%rdx,1),%bl
 mov %bl,(%rsp,%rcx,1)
 inc %ecx
+inc %rsi
 cmp $12,%ecx
 jne @transform_ccw_X2
 mov (%rsp),%bx
@@ -1039,15 +1082,19 @@ mov 2(%rsp),%bl
 mov %bl,14(%rsp)
 
 xor %ecx,%ecx
+lea @cube_transform3-@_$NEXT(%rip),%rsi
 @transform_ccw_X3
-movzbl @cube_transform3(%rax,%rcx,1),%edx
+movzbl (%rax,%rsi,1),%edx
 mov 3(%rsp,%rcx,1),%bl
-mov %bl,@_$DATA+256(%rdx)
+sub %rcx,%rdx
+mov %bl,@_$DATA+256-@cube_transform3(%rsi,%rdx,1)
 inc %ecx
+inc %rsi
 cmp $12,%ecx
 jne @transform_ccw_X3
 
-add $128,%rsp
+add $136,%rsp
+pop %rsi
 pop %rbx
 pop %rdx
 pop %rcx
@@ -1090,7 +1137,7 @@ mov 112(%rsp),%rcx
 .dllcall "gdi32.dll" "SelectObject"
 mov 120(%rsp),%rcx
 mov $1440000,%edx
-mov $@_$DATA+4096,%r8
+lea @_$DATA+4096-@_$NEXT(%rip),%r8
 .dllcall "gdi32.dll" "SetBitmapBits"
 mov 32(%rsp),%rcx
 xor %edx,%edx
@@ -1123,7 +1170,7 @@ jne @WndProc_TIMER
 
 mov $0x3d9a6a62,%eax
 movd %eax,%xmm0
-movss @_$DATA+116,%xmm1
+movss @_$DATA+116-@_$NEXT(%rip),%xmm1
 comiss %xmm0,%xmm1
 ja @TIMER_X1
 
@@ -1131,17 +1178,17 @@ mov $0xbd9a6a62,%eax
 movd %eax,%xmm0
 comiss %xmm0,%xmm1
 jb @TIMER_X1
-movb $0,@_$DATA+96
-movb $1,@_$DATA+99
+movb $0,@_$DATA+96-@_$NEXT(%rip)
+movb $1,@_$DATA+99-@_$NEXT(%rip)
 jmp @TIMER_XE
 @TIMER_X1
 subss %xmm0,%xmm1
-movss %xmm1,@_$DATA+116
-movb $1,@_$DATA+99
+movss %xmm1,@_$DATA+116-@_$NEXT(%rip)
+movb $1,@_$DATA+99-@_$NEXT(%rip)
 @TIMER_XE
 
 mov $0,%al
-xchg %al,@_$DATA+99
+xchg %al,@_$DATA+99-@_$NEXT(%rip)
 test %al,%al
 je @WndProc_End
 sub $32,%rsp
@@ -1156,18 +1203,18 @@ jmp @WndProc_End
 
 cmp $513,%edx
 jne @WndProc_LBUTTONDOWN
-movl $0,@_$DATA+100
-movb $1,@_$DATA+97
-mov %r9d,@_$DATA+108
+movl $0,@_$DATA+100-@_$NEXT(%rip)
+movb $1,@_$DATA+97-@_$NEXT(%rip)
+mov %r9d,@_$DATA+108-@_$NEXT(%rip)
 jmp @WndProc_End
 @WndProc_LBUTTONDOWN
 
 cmp $514,%edx
 jne @WndProc_LBUTTONUP
-movb $0,@_$DATA+97
-cmpb $0,@_$DATA+96
+movb $0,@_$DATA+97-@_$NEXT(%rip)
+cmpb $0,@_$DATA+96-@_$NEXT(%rip)
 jne @WndProc_End
-cmpl $10,@_$DATA+100
+cmpl $10,@_$DATA+100-@_$NEXT(%rip)
 ja @WndProc_End
 mov %r9d,%edx
 movswl %dx,%ecx
@@ -1180,32 +1227,33 @@ mov $600,%eax
 mul %edx
 add %eax,%ecx
 shl $2,%ecx
-mov @_$DATA+1444096(%rcx),%eax
+lea @_$DATA+1444096-@_$NEXT(%rip),%rdx
+mov (%rdx,%rcx,1),%eax
 cmp $-1,%eax
 je @WndProc_End
-movl $0x3fc90fdb,@_$DATA+116
+movl $0x3fc90fdb,@_$DATA+116-@_$NEXT(%rip)
 shr $4,%al
 call @transform_ccw
 inc %al
-mov %al,@_$DATA+96
-movb $1,@_$DATA+99
+mov %al,@_$DATA+96-@_$NEXT(%rip)
+movb $1,@_$DATA+99-@_$NEXT(%rip)
 jmp @WndProc_End
 @WndProc_LBUTTONUP
 
 cmp $516,%edx
 jne @WndProc_RBUTTONDOWN
-movl $0,@_$DATA+104
-movb $1,@_$DATA+98
-mov %r9d,@_$DATA+108
+movl $0,@_$DATA+104-@_$NEXT(%rip)
+movb $1,@_$DATA+98-@_$NEXT(%rip)
+mov %r9d,@_$DATA+108-@_$NEXT(%rip)
 jmp @WndProc_End
 @WndProc_RBUTTONDOWN
 
 cmp $517,%edx
 jne @WndProc_RBUTTONUP
-movb $0,@_$DATA+98
-cmpb $0,@_$DATA+96
+movb $0,@_$DATA+98-@_$NEXT(%rip)
+cmpb $0,@_$DATA+96-@_$NEXT(%rip)
 jne @WndProc_End
-cmpl $10,@_$DATA+104
+cmpl $10,@_$DATA+104-@_$NEXT(%rip)
 ja @WndProc_End
 mov %r9d,%edx
 movswl %dx,%ecx
@@ -1218,53 +1266,53 @@ mov $600,%eax
 mul %edx
 add %eax,%ecx
 shl $2,%ecx
-mov @_$DATA+1444096(%rcx),%eax
+lea @_$DATA+1444096-@_$NEXT(%rip),%rdx
+mov (%rdx,%rcx,1),%eax
 cmp $-1,%eax
 je @WndProc_End
-movl $0xbfc90fdb,@_$DATA+116
+movl $0xbfc90fdb,@_$DATA+116-@_$NEXT(%rip)
 shr $4,%al
 call @transform_cw
 inc %al
-mov %al,@_$DATA+96
-movb $1,@_$DATA+99
-jmp @WndProc_End
+mov %al,@_$DATA+96-@_$NEXT(%rip)
+movb $1,@_$DATA+99-@_$NEXT(%rip)
 jmp @WndProc_End
 @WndProc_RBUTTONUP
 
 cmp $512,%edx
 jne @WndProc_End
 # WM_MOUSEMOVE
-cmp @_$DATA+108,%r9d
+cmp @_$DATA+108-@_$NEXT(%rip),%r9d
 je @WndProc_End
 
 test $1,%r8d
 je @MOUSEMOVE_NOLEFT
 movswl %r9w,%eax
-movswl @_$DATA+108,%ecx
+movswl @_$DATA+108-@_$NEXT(%rip),%ecx
 sub %ecx,%eax
 cmp $0,%eax
 jg @MOUSEMOVE_LEFT_NEG1
 neg %eax
 @MOUSEMOVE_LEFT_NEG1
-add %eax,@_$DATA+100
+add %eax,@_$DATA+100-@_$NEXT(%rip)
 mov %r9d,%eax
 sar $16,%eax
-movswl @_$DATA+110,%ecx
+movswl @_$DATA+110-@_$NEXT(%rip),%ecx
 sub %ecx,%eax
 cmp $0,%eax
 jg @MOUSEMOVE_LEFT_NEG2
 neg %eax
 @MOUSEMOVE_LEFT_NEG2
-add %eax,@_$DATA+100
+add %eax,@_$DATA+100-@_$NEXT(%rip)
 
 movswl %r9w,%eax
-movswl @_$DATA+108,%edx
+movswl @_$DATA+108-@_$NEXT(%rip),%edx
 sub %edx,%eax
 mul %eax
 mov %eax,%ecx
 mov %r9d,%eax
 sar $16,%eax
-movswl @_$DATA+110,%edx
+movswl @_$DATA+110-@_$NEXT(%rip),%edx
 sub %edx,%eax
 mul %eax
 add %eax,%ecx
@@ -1275,12 +1323,12 @@ cvtss2sd %xmm0,%xmm0
 cvtsd2ss %xmm0,%xmm0
 
 movswq %r9w,%rax
-movswq @_$DATA+108,%rdx
+movswq @_$DATA+108-@_$NEXT(%rip),%rdx
 sub %rdx,%rax
 cvtsi2ss %rax,%xmm1
 movslq %r9d,%rax
 sar $16,%rax
-movswq @_$DATA+110,%rdx
+movswq @_$DATA+110-@_$NEXT(%rip),%rdx
 sub %rdx,%rax
 cvtsi2ss %rax,%xmm2
 divss %xmm0,%xmm1
@@ -1295,14 +1343,15 @@ mov $60,%eax
 cvtsi2ss %eax,%xmm1
 divss %xmm1,%xmm0
 movss %xmm0,16(%rsp)
-movq $@_$DATA+0,8(%rsp)
+lea @_$DATA+0-@_$NEXT(%rip),%rax
+mov %rax,8(%rsp)
 call @rotate_around
 addq $16,8(%rsp)
 call @rotate_around
 addq $16,8(%rsp)
 call @rotate_around
 
-movb $1,@_$DATA+99
+movb $1,@_$DATA+99-@_$NEXT(%rip)
 
 add $128,%rsp
 
@@ -1311,24 +1360,24 @@ add $128,%rsp
 test $2,%r8d
 je @MOUSEMOVE_NORIGHT
 movswl %r9w,%eax
-movswl @_$DATA+108,%ecx
+movswl @_$DATA+108-@_$NEXT(%rip),%ecx
 sub %ecx,%eax
 cmp $0,%eax
 jg @MOUSEMOVE_RIGHT_NEG1
 neg %eax
 @MOUSEMOVE_RIGHT_NEG1
-add %eax,@_$DATA+104
+add %eax,@_$DATA+104-@_$NEXT(%rip)
 mov %r9d,%eax
 sar $16,%eax
-movswl @_$DATA+110,%ecx
+movswl @_$DATA+110-@_$NEXT(%rip),%ecx
 sub %ecx,%eax
 cmp $0,%eax
 jg @MOUSEMOVE_RIGHT_NEG2
 neg %eax
 @MOUSEMOVE_RIGHT_NEG2
-add %eax,@_$DATA+104
+add %eax,@_$DATA+104-@_$NEXT(%rip)
 @MOUSEMOVE_NORIGHT
-mov %r9d,@_$DATA+108
+mov %r9d,@_$DATA+108-@_$NEXT(%rip)
 
 @WndProc_End
 mov (%rsp),%rcx
